@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Temperature Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 24px;
+            max-width: 440px;
+            margin: auto;
+            background: #f7f7f7;
+            color: #333;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 24px;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #0078d4;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #005a9e;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 16px;
+            background: #e5f3ff;
+            border: 1px solid #c7e2ff;
+            border-radius: 8px;
+            min-height: 42px;
+        }
+
+        .error {
+            color: #c82333;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Temperature Converter</h1>
+        <div class="field">
+            <label for="tempInput">Temperature value</label>
+            <input id="tempInput" type="text" placeholder="Enter temperature" />
+            <div id="errorMessage" class="error" aria-live="polite"></div>
+        </div>
+
+        <div class="field">
+            <label for="fromUnit">From</label>
+            <select id="fromUnit">
+                <option value="celsius">Celsius (°C)</option>
+                <option value="fahrenheit">Fahrenheit (°F)</option>
+                <option value="kelvin">Kelvin (K)</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="toUnit">Convert to</label>
+            <select id="toUnit">
+                <option value="fahrenheit">Fahrenheit (°F)</option>
+                <option value="celsius">Celsius (°C)</option>
+                <option value="kelvin">Kelvin (K)</option>
+            </select>
+        </div>
+
+        <button id="convertButton" type="button">Convert</button>
+
+        <div id="result" aria-live="polite">Enter a temperature and choose units to convert.</div>
+    </div>
+
+    <script>
+        const tempInput = document.getElementById('tempInput');
+        const fromUnit = document.getElementById('fromUnit');
+        const toUnit = document.getElementById('toUnit');
+        const convertButton = document.getElementById('convertButton');
+        const result = document.getElementById('result');
+        const errorMessage = document.getElementById('errorMessage');
+
+        function toKelvin(value, unit) {
+            if (unit === 'celsius') {
+                return value + 273.15;
+            }
+            if (unit === 'fahrenheit') {
+                return (value + 459.67) * 5 / 9;
+            }
+            return value;
+        }
+
+        function fromKelvin(kelvin, unit) {
+            if (unit === 'celsius') {
+                return kelvin - 273.15;
+            }
+            if (unit === 'fahrenheit') {
+                return kelvin * 9 / 5 - 459.67;
+            }
+            return kelvin;
+        }
+
+        function formatUnit(unit) {
+            if (unit === 'celsius') return '°C';
+            if (unit === 'fahrenheit') return '°F';
+            return 'K';
+        }
+
+        function convertTemperature() {
+            errorMessage.textContent = '';
+            const rawValue = tempInput.value.trim();
+            const value = parseFloat(rawValue);
+
+            if (rawValue === '' || Number.isNaN(value)) {
+                errorMessage.textContent = 'Please enter a valid number.';
+                result.textContent = 'Conversion unavailable.';
+                return;
+            }
+
+            const sourceUnit = fromUnit.value;
+            const targetUnit = toUnit.value;
+            const kelvinValue = toKelvin(value, sourceUnit);
+            const convertedValue = fromKelvin(kelvinValue, targetUnit);
+            const rounded = Math.round(convertedValue * 100) / 100;
+            const unitLabel = formatUnit(targetUnit);
+
+            result.textContent = `${rounded} ${unitLabel}`;
+        }
+
+        convertButton.addEventListener('click', convertTemperature);
+
+        tempInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                convertTemperature();
+            }
+        });
+    </script>
+</body>
+</html>

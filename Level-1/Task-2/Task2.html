@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Achha Nethaji | Portfolio</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f4f6;
+      --surface: #ffffff;
+      --surface-strong: #e5e7eb;
+      --text: #111827;
+      --muted: #4b5563;
+      --primary: #2563eb;
+      --primary-soft: #dbeafe;
+      --border: #e5e7eb;
+      --shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    body a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    body a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 32px;
+      background: var(--surface);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      padding: 32px;
+    }
+
+    .profile-photo {
+      width: 100%;
+      max-width: 280px;
+      border-radius: 24px;
+      object-fit: cover;
+      aspect-ratio: 1 / 1;
+      object-position: center;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .hero__content h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+
+    .hero__content .subtitle {
+      margin: 0 0 20px;
+      color: var(--muted);
+      max-width: 780px;
+    }
+
+    .hero__items {
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .hero__item {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      color: var(--muted);
+    }
+
+    .hero__item strong {
+      color: var(--text);
+      min-width: 110px;
+      display: inline-block;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 0.92rem;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    .section {
+      background: var(--surface);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-top: 24px;
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.6rem;
+    }
+
+    .section p,
+    .section li,
+    .section dt,
+    .section dd {
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .list-inline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .list-inline li {
+      background: var(--surface-strong);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 24px;
+    }
+
+    .timeline-item {
+      border-left: 4px solid var(--primary);
+      padding: 18px 22px;
+      border-radius: 18px;
+      background: #f8fafc;
+    }
+
+    .timeline-item h3 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+    }
+
+    .timeline-item time {
+      display: block;
+      color: var(--primary);
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .project-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .project-card {
+      border-radius: 22px;
+      background: #f8fafc;
+      padding: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .project-card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .project-card p {
+      margin: 0;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .contact-list p {
+      margin: 0;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 22px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .button:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .section-columns {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: 1.2fr 0.8fr;
+    }
+
+    dl {
+      margin: 0;
+    }
+
+    dt {
+      font-weight: 700;
+      margin-top: 20px;
+    }
+
+    dd {
+      margin: 6px 0 0 0;
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .section-columns,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        padding: 20px 16px 36px;
+      }
+
+      .hero {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <span class="badge">Full-Stack Web Developer</span>
+      </div>
+      <div class="contact-list">
+        <p>Warangal, Telangana, India</p>
+        <p><a href="tel:+919949580806">+91-9949580806</a> · <a href="mailto:achhanethaji@gmail.com">achhanethaji@gmail.com</a></p>
+      </div>
+    </header>
+
+    <section class="hero">
+      <img class="profile-photo" src="nethaji_achha_pic.png" alt="Achha Nethaji">
+      <div class="hero__content">
+        <h1>Achha Nethaji</h1>
+        <p class="subtitle">Google Certified UI/UX Designer and full-stack web developer skilled in MERN, Python, cloud technologies, AI/ML, and product management. I build scalable web applications backed by research, patents, and practical teaching experience.</p>
+
+        <div class="hero__items">
+          <div class="hero__item"><strong>Location:</strong> Hasanparthy, Warangal</div>
+          <div class="hero__item"><strong>Education:</strong> M.Eng. SR University · B.Tech ECE SR Engineering College</div>
+          <div class="hero__item"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/achha-nethaji" target="_blank" rel="noopener noreferrer">linkedin.com/in/achha-nethaji</a></div>
+          <div class="hero__item"><strong>Portfolio:</strong> <a href="https://nethaji-achha.github.io/cv" target="_blank" rel="noopener noreferrer">nethaji-achha.github.io/cv</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Professional Summary</h2>
+      <p>Full-stack web developer and Google Certified UI/UX Designer with expertise in building scalable web applications, conducting user research, and implementing AI/ML solutions. Proven experience across product management, software development, and teaching roles, supported by published research and a patent.</p>
+    </section>
+
+    <section class="section section-columns">
+      <div>
+        <h2>Technical Skills</h2>
+        <ul class="list-inline">
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>JavaScript</li>
+          <li>Node.js</li>
+          <li>Express.js</li>
+          <li>EJS</li>
+          <li>Bootstrap</li>
+          <li>Python</li>
+          <li>SQL</li>
+          <li>MongoDB</li>
+          <li>MERN</li>
+          <li>REST APIs</li>
+          <li>AI/ML</li>
+          <li>VGG19</li>
+          <li>UI/UX Design</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2>Certifications</h2>
+        <dl>
+          <dt>Google UX Design Professional Certificate</dt>
+          <dd>4 courses completed</dd>
+          <dt>Google Project Management Certificate</dt>
+          <dt>Cybersecurity Essentials</dt>
+          <dt>Create Your First Python Program (UST)</dt>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Professional Experience</h2>
+      <div class="timeline">
+        <article class="timeline-item">
+          <time>Associate Product Manager · Xelpmoc Design and Tech Limited</time>
+          <h3>January 2023 – July 2023</h3>
+          <p>Managed product lifecycle from ideation to launch, coordinated engineering and design teams, and translated user research into prioritized product requirements.</p>
+        </article>
+
+        <article class="timeline-item">
+          <time>Machine Learning Intern · Octazen Software Solutions Pvt. Ltd.</time>
+          <h3>August 2021 – October 2021</h3>
+          <p>Developed image classification models using the VGG19 architecture and built end-to-end ML pipelines for preprocessing, training, evaluation, and deployment.</p>
+        </article>
+
+        <article class="timeline-item">
+          <time>Coding Educator · BrightChamps</time>
+          <h3>June 2022 – August 2022</h3>
+          <p>Taught programming fundamentals and web development, developed curriculum materials, and mentored students in problem-solving and computational thinking.</p>
+        </article>
+
+        <article class="timeline-item">
+          <time>Intern · Blend Vidya</time>
+          <h3>May 2024 – August 2024</h3>
+          <p>Contributed to educational technology initiatives supporting blended learning, collaborating with remote cross-functional teams on product improvements.</p>
+        </article>
+
+        <article class="timeline-item">
+          <time>Social Media Coordinator · Edvizo</time>
+          <h3>Remote</h3>
+          <p>Managed content strategy and community engagement, analyzing metrics to improve reach and strengthen the platform’s educational presence.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Selected Projects</h2>
+      <div class="project-grid">
+        <div class="project-card">
+          <h3>Hospital Management System</h3>
+          <p>Built a full-stack application with CRUD functionality, user authentication, and database integration to support hospital operations during internship.</p>
+        </div>
+        <div class="project-card">
+          <h3>Smart IoT & Cloud Solutions</h3>
+          <p>Delivered product-based projects that combined IoT devices with cloud systems, focusing on scalability, reliability, and improved user experience.</p>
+        </div>
+        <div class="project-card">
+          <h3>AI/ML Applications</h3>
+          <p>Implemented image classification, natural language processing, and predictive analytics solutions using modern ML practices and tools.</p>
+        </div>
+        <div class="project-card">
+          <h3>Personal Web Portfolio</h3>
+          <p>Designed responsive web applications with HTML, CSS, JavaScript, Node.js, Express.js, and MongoDB to showcase full-stack capabilities.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Education</h2>
+      <div class="timeline">
+        <article class="timeline-item">
+          <time>Expected 2025 - 2027</time>
+          <h3>Master’s Degree in Engineering-Computer Science Engineering</h3>
+          <p>SR University, Warangal, Telangana</p>
+        </article>
+        <article class="timeline-item">
+          <time>2019 – 2023</time>
+          <h3>Bachelor of Technology in Electronics and Communication Engineering</h3>
+          <p>SR Engineering College, Warangal, Telangana</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Publications & Intellectual Property</h2>
+      <ul>
+        <li>Cloud-based Centralized Smart Electricity Billing and Payment Management System</li>
+        <li>Affordable Multitasking Drone for Smart Farming with Artificial Intelligence</li>
+        <li>Futuristic IoT-Enabled Toilet Maintenance System for Smart Cities</li>
+        <li>Disease Transmission Prevention at Public Toilets with IoT-Enabled Devices</li>
+      </ul>
+      <p><strong>Patent:</strong> Smart Pill Box – IoT-enabled medication management solution.</p>
+    </section>
+
+    <section class="section">
+      <h2>Contact & Connect</h2>
+      <div class="contact-list">
+        <p><strong>Location:</strong> Warangal, Telangana</p>
+        <p><strong>Email:</strong> <a href="mailto:achhanethaji@gmail.com">achhanethaji@gmail.com</a></p>
+        <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/achha-nethaji" target="_blank" rel="noopener noreferrer">linkedin.com/in/achha-nethaji</a></p>
+        <p><strong>Portfolio:</strong> <a href="https://nethaji-achha.github.io/cv" target="_blank" rel="noopener noreferrer">nethaji-achha.github.io/cv</a></p>
+      </div>
+      <p style="margin-top:24px;"><a class="button" href="mailto:achhanethaji@gmail.com">Send a message</a></p>
+    </section>
+  </main>
+</body>
+</html>
