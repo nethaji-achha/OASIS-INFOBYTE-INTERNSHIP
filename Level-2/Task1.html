@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Calculator</title>
+	<style>
+		:root{
+			--bg:#0f1724; --panel:#0b1220; --accent:#06b6d4; --btn:#111827; --muted:#94a3b8;
+		}
+		*{box-sizing:border-box}
+		body{
+			margin:0; font-family:Inter,Segoe UI,Roboto,Arial; background:linear-gradient(135deg,#071124 0%,#082432 100%);
+			min-height:100vh; display:flex; align-items:center; justify-content:center; color:#e6eef6;
+		}
+		.calc{
+			width:340px; background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+			border-radius:16px; padding:18px; box-shadow:0 8px 30px rgba(2,6,23,0.6);
+		}
+		.screen{
+			height:78px; background:rgba(2,6,23,0.6); border-radius:10px; padding:12px; display:flex; flex-direction:column; justify-content:center; align-items:flex-end;
+			color:var(--accent); font-size:28px; font-weight:600; letter-spacing:0.6px; margin-bottom:14px; overflow:hidden;
+		}
+		.screen .small{font-size:12px; color:var(--muted); font-weight:500}
+		.keys{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+		button{
+			border:0; padding:16px; border-radius:10px; font-size:18px; cursor:pointer; color:#e6eef6; background:var(--btn);
+			box-shadow:inset 0 -3px 0 rgba(0,0,0,0.25);
+		}
+		button:hover{filter:brightness(1.06)}
+		.op{background:linear-gradient(180deg,#064e57,#04696f); color:#e6fff9}
+		.equal{grid-column:span 2; background:linear-gradient(180deg,#ff7a18,#ff3d00); color:#fff; font-weight:700}
+		.zero{grid-column:span 2}
+		.clear{background:linear-gradient(180deg,#4b5563,#374151); color:#fff}
+		.dot{background:linear-gradient(180deg,#374151,#1f2937)}
+		footer{margin-top:12px; text-align:center; font-size:12px; color:var(--muted)}
+	</style>
+</head>
+<body>
+	<div class="calc" role="application" aria-label="Calculator">
+		<div class="screen" id="screen">
+			<div class="small" id="history">&nbsp;</div>
+			<div id="display">0</div>
+		</div>
+		<div class="keys">
+			<button class="clear" id="all-clear">AC</button>
+			<button class="clear" id="clear">C</button>
+			<button class="op" data-op="%">%</button>
+			<button class="op" data-op="/">÷</button>
+
+			<button data-num="7">7</button>
+			<button data-num="8">8</button>
+			<button data-num="9">9</button>
+			<button class="op" data-op="*">×</button>
+
+			<button data-num="4">4</button>
+			<button data-num="5">5</button>
+			<button data-num="6">6</button>
+			<button class="op" data-op="-">−</button>
+
+			<button data-num="1">1</button>
+			<button data-num="2">2</button>
+			<button data-num="3">3</button>
+			<button class="op" data-op="+">+</button>
+
+			<button class="zero" data-num="0">0</button>
+			<button class="dot" id="dot">.</button>
+			<button class="equal" id="equals">=</button>
+		</div>
+		<footer>Simple Calculator — supports + − × ÷ % and decimals</footer>
+	</div>
+
+	<script>
+		const display = document.getElementById('display');
+		const historyEl = document.getElementById('history');
+		let current = '';
+		let previous = '';
+		let operator = null;
+
+		function refresh(){
+			display.textContent = current || previous || '0';
+			historyEl.textContent = previous && operator ? `${previous} ${operator}` : '';
+		}
+
+		function clearAll(){ current=''; previous=''; operator=null; refresh(); }
+		function clearEntry(){ current=''; refresh(); }
+
+		document.querySelectorAll('[data-num]').forEach(b=>b.addEventListener('click',e=>{
+			const v=e.target.getAttribute('data-num');
+			if(v==='0' && current==='0') return;
+			current = (current==='0')? v : current+v;
+			refresh();
+		}));
+
+		document.getElementById('dot').addEventListener('click',()=>{
+			if(current.includes('.')) return; if(current==='') current='0.'; else current+='.'; refresh();
+		});
+
+		document.querySelectorAll('[data-op]').forEach(b=>b.addEventListener('click',e=>{
+			const op = e.target.getAttribute('data-op');
+			if(op==='%'){
+				if(current) current = String((parseFloat(current)/100));
+				else if(previous) previous = String((parseFloat(previous)/100));
+				refresh(); return;
+			}
+			if(current===''){
+				operator = op; refresh(); return;
+			}
+			if(previous){ compute(); }
+			else { previous = current; }
+			current=''; operator=op; refresh();
+		}));
+
+		function compute(){
+			if(!operator || previous==='' ) return;
+			const a = parseFloat(previous);
+			const b = parseFloat(current||previous);
+			let res = 0;
+			switch(operator){
+				case '+': res = a + b; break;
+				case '-': res = a - b; break;
+				case '*': res = a * b; break;
+				case '/': res = b===0 ? 'Error' : a / b; break;
+			}
+			previous = String(res);
+			current=''; operator=null;
+		}
+
+		document.getElementById('equals').addEventListener('click',()=>{ compute(); refresh(); });
+		document.getElementById('all-clear').addEventListener('click', clearAll);
+		document.getElementById('clear').addEventListener('click', clearEntry);
+
+		// keyboard support
+		window.addEventListener('keydown',e=>{
+			if(e.key>=0 && e.key<=9) document.querySelector(`[data-num="${e.key}"]`)?.click();
+			if(e.key==='.' ) document.getElementById('dot').click();
+			if(['+','-','*','/'].includes(e.key)) document.querySelector(`[data-op="${e.key}"]`)?.click();
+			if(e.key==='Enter' || e.key==='=') document.getElementById('equals').click();
+			if(e.key==='Backspace') document.getElementById('clear').click();
+			if(e.key==='Escape') document.getElementById('all-clear').click();
+		});
+
+		refresh();
+	</script>
+</body>
+</html>

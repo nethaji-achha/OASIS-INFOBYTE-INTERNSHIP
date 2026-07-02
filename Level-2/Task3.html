@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Colorful To-Do App</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: rgba(15, 23, 42, 0.92);
+      --accent: #f97316;
+      --accent-soft: #fbf0e7;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --green: #22c55e;
+      --red: #ef4444;
+      --blue: #38bdf8;
+      --shadow: 0 20px 50px rgba(15, 23, 42, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, sans-serif;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, .2), transparent 25%),
+                  radial-gradient(circle at bottom right, rgba(251, 146, 60, .16), transparent 22%),
+                  linear-gradient(180deg, #020617 0%, #0f172a 100%);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 30px 20px 50px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 3vw, 3rem);
+      letter-spacing: 0.02em;
+    }
+
+    header p {
+      margin: 12px auto 0;
+      max-width: 640px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .task-form {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      margin-bottom: 26px;
+      padding: 24px;
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .task-form label {
+      display: block;
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .task-inputs {
+      display: grid;
+      gap: 12px;
+    }
+
+    .task-inputs input,
+    .task-inputs textarea {
+      width: 100%;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      padding: 14px 16px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .task-inputs textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .task-inputs input:focus,
+    .task-inputs textarea:focus {
+      border-color: rgba(56, 189, 248, 0.55);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
+    }
+
+    .task-form button {
+      height: 52px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #fb923c, #f97316);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .task-form button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(249, 115, 22, 0.24);
+    }
+
+    .task-board {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      margin: 0 0 14px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .badge {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      background: rgba(56, 189, 248, 0.16);
+      color: #38bdf8;
+    }
+
+    .task-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 14px;
+    }
+
+    .task-item {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.82);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+    }
+
+    .task-item.completed {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: rgba(34, 197, 94, 0.18);
+    }
+
+    .task-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .task-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .task-actions button {
+      border: none;
+      border-radius: 14px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: transform 0.15s ease;
+    }
+
+    .task-actions button:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-edit {
+      background: rgba(56, 189, 248, 0.16);
+      color: #38bdf8;
+    }
+
+    .btn-delete {
+      background: rgba(239, 68, 68, 0.16);
+      color: #ef4444;
+    }
+
+    .btn-toggle {
+      background: rgba(34, 197, 94, 0.16);
+      color: #16a34a;
+    }
+
+    .no-tasks {
+      color: var(--muted);
+      padding: 18px 12px;
+      border-radius: 16px;
+      border: 1px dashed rgba(148, 163, 184, 0.3);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 640px) {
+      .task-form {
+        grid-template-columns: 1fr;
+      }
+
+      .task-form button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Colorful To-Do App</h1>
+      <p>Track your daily tasks with pending and completed lists. Add, edit, complete, or delete tasks with timestamps for better productivity.</p>
+    </header>
+
+    <section class="task-form">
+      <div class="task-inputs">
+        <label for="task-title">Task title</label>
+        <input id="task-title" type="text" placeholder="Enter a task" />
+        <label for="task-notes">Notes (optional)</label>
+        <textarea id="task-notes" placeholder="Add details or a reminder"></textarea>
+      </div>
+      <button id="add-task">Add Task</button>
+    </section>
+
+    <div class="task-board">
+      <section class="card">
+        <h2>Pending Tasks <span class="badge" id="pending-count">0</span></h2>
+        <ul class="task-list" id="pending-list"></ul>
+        <div class="no-tasks" id="no-pending">No pending tasks. Add something new to get started!</div>
+      </section>
+
+      <section class="card">
+        <h2>Completed Tasks <span class="badge" id="completed-count">0</span></h2>
+        <ul class="task-list" id="completed-list"></ul>
+        <div class="no-tasks" id="no-completed">No completed tasks yet. Mark a task complete when done.</div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const tasks = [];
+    const titleInput = document.getElementById('task-title');
+    const notesInput = document.getElementById('task-notes');
+    const addTaskButton = document.getElementById('add-task');
+    const pendingList = document.getElementById('pending-list');
+    const completedList = document.getElementById('completed-list');
+    const pendingCount = document.getElementById('pending-count');
+    const completedCount = document.getElementById('completed-count');
+    const noPending = document.getElementById('no-pending');
+    const noCompleted = document.getElementById('no-completed');
+
+    function formatTimestamp(date) {
+      return date.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function renderLists() {
+      pendingList.innerHTML = '';
+      completedList.innerHTML = '';
+
+      const pendingTasks = tasks.filter(t => !t.completed);
+      const completedTasks = tasks.filter(t => t.completed);
+
+      pendingCount.textContent = pendingTasks.length;
+      completedCount.textContent = completedTasks.length;
+
+      noPending.style.display = pendingTasks.length === 0 ? 'block' : 'none';
+      noCompleted.style.display = completedTasks.length === 0 ? 'block' : 'none';
+
+      pendingTasks.forEach(task => {
+        const item = createTaskItem(task);
+        pendingList.appendChild(item);
+      });
+
+      completedTasks.forEach(task => {
+        const item = createTaskItem(task);
+        item.classList.add('completed');
+        completedList.appendChild(item);
+      });
+    }
+
+    function createTaskItem(task) {
+      const li = document.createElement('li');
+      li.className = 'task-item';
+
+      const title = document.createElement('strong');
+      title.textContent = task.title;
+
+      const notes = document.createElement('p');
+      notes.textContent = task.notes || 'No description provided.';
+      notes.style.margin = '0';
+      notes.style.color = '#cbd5e1';
+
+      const meta = document.createElement('div');
+      meta.className = 'task-meta';
+      meta.innerHTML = `<span>Added: ${task.addedAt}</span>${task.completedAt ? `<span>Completed: ${task.completedAt}</span>` : ''}`;
+
+      const actions = document.createElement('div');
+      actions.className = 'task-actions';
+
+      const completeButton = document.createElement('button');
+      completeButton.className = 'btn-toggle';
+      completeButton.textContent = task.completed ? 'Mark Pending' : 'Complete';
+      completeButton.onclick = () => toggleCompletion(task.id);
+
+      const editButton = document.createElement('button');
+      editButton.className = 'btn-edit';
+      editButton.textContent = 'Edit';
+      editButton.onclick = () => editTask(task.id);
+
+      const deleteButton = document.createElement('button');
+      deleteButton.className = 'btn-delete';
+      deleteButton.textContent = 'Delete';
+      deleteButton.onclick = () => deleteTask(task.id);
+
+      actions.appendChild(completeButton);
+      actions.appendChild(editButton);
+      actions.appendChild(deleteButton);
+
+      li.appendChild(title);
+      li.appendChild(notes);
+      li.appendChild(meta);
+      li.appendChild(actions);
+
+      return li;
+    }
+
+    function addTask() {
+      const title = titleInput.value.trim();
+      const notes = notesInput.value.trim();
+      if (!title) {
+        titleInput.focus();
+        return;
+      }
+
+      const task = {
+        id: Date.now().toString(),
+        title,
+        notes,
+        completed: false,
+        addedAt: formatTimestamp(new Date()),
+        completedAt: null,
+      };
+
+      tasks.unshift(task);
+      titleInput.value = '';
+      notesInput.value = '';
+      renderLists();
+    }
+
+    function toggleCompletion(id) {
+      const task = tasks.find(t => t.id === id);
+      if (!task) return;
+      task.completed = !task.completed;
+      task.completedAt = task.completed ? formatTimestamp(new Date()) : null;
+      renderLists();
+    }
+
+    function deleteTask(id) {
+      const index = tasks.findIndex(t => t.id === id);
+      if (index !== -1) {
+        tasks.splice(index, 1);
+        renderLists();
+      }
+    }
+
+    function editTask(id) {
+      const task = tasks.find(t => t.id === id);
+      if (!task) return;
+
+      const newTitle = prompt('Edit task title:', task.title);
+      if (newTitle === null) return;
+      const trimmedTitle = newTitle.trim();
+      if (!trimmedTitle) return;
+
+      const newNotes = prompt('Edit task notes:', task.notes);
+      if (newNotes === null) return;
+
+      task.title = trimmedTitle;
+      task.notes = newNotes.trim();
+      renderLists();
+    }
+
+    addTaskButton.addEventListener('click', addTask);
+    titleInput.addEventListener('keydown', event => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        addTask();
+      }
+    });
+
+    renderLists();
+  </script>
+</body>
+</html>
